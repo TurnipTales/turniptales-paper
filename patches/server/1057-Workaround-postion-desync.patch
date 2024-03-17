@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Felix <29801805+ImGxrke@users.noreply.github.com>
+Date: Sun, 17 Mar 2024 17:49:34 +0100
+Subject: [PATCH] Workaround postion desync
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
+index 529ab44baaf573b97cf7e89560c548642733188f..125e097ed1da144bf2e314de6835647ed64a102b 100644
+--- a/src/main/java/net/minecraft/server/level/ServerEntity.java
++++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
+@@ -372,6 +372,7 @@ public class ServerEntity {
+             }
+         }
+ 
++        sender.accept(new ClientboundTeleportEntityPacket(this.entity));
+     }
+ 
+     private void sendDirtyEntityData() {
