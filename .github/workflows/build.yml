@@ -86,14 +86,12 @@ jobs:
             **/build/test-results/test/TEST-*.xml
 
       - name: Create Paperclip Jar
-        if: fromJSON(steps.determine.outputs.result).action == 'paperclip'
         run: ./gradlew createReobfPaperclipJar --stacktrace
 
       - name: Upload Paperclip Jar
-        if: fromJSON(steps.determine.outputs.result).action == 'paperclip'
         uses: actions/upload-artifact@v4
         with:
-          name: paper-${{ fromJSON(steps.determine.outputs.result).pr }}
+          name: paperclip.jar
           path: build/libs/paper-paperclip-*-reobf.jar
   event_file:
     name: "Event File"
