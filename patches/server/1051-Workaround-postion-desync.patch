@@ -5,10 +5,10 @@ Subject: [PATCH] Workaround postion desync
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 529ab44baaf573b97cf7e89560c548642733188f..125e097ed1da144bf2e314de6835647ed64a102b 100644
+index a2279262c93408c11f5d2290b48fd794975e8cfe..0cf1e763dd8857ade87ae8c8bb631516d6efc11f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -372,6 +372,7 @@ public class ServerEntity {
+@@ -382,6 +382,7 @@ public class ServerEntity {
              }
          }
  
