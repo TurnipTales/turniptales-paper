@@ -51,22 +51,22 @@ jobs:
       - name: Pull upstream master branch
         run: git pull upstream master
 
-      - name: Push to GitHub
-        run: git push
+    #  - name: Push to GitHub
+     #   run: git push
 
       - name: Apply Patches
-        if: ${{ github.event.inputs.paperclip == true }}
+        if: ${{ inputs.paperclip == true }}
         run: |
           git config --global user.email "no-reply@github.com"
           git config --global user.name "GitHub Actions"
           ./gradlew applyPatches --stacktrace
 
       - name: Create Paperclip Jar
-        if: ${{ github.event.inputs.paperclip == true }}
+        if: ${{ inputs.paperclip == true }}
         run: ./gradlew createMojmapPaperclipJar --stacktrace
 
       - name: Upload Paperclip Jar
-        if: ${{ github.event.inputs.paperclip == true }}
+        if: ${{ inputs.paperclip == true }}
         uses: actions/upload-artifact@v4
         with:
           name: paperclip-turniptales
