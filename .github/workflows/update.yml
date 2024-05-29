@@ -38,6 +38,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Setup remotes
+        run: git remote add upstream https://github.com/PaperMC/Paper.git && git remote set-url --push upstream DISABLE
+        
       - name: Fetch upstream repo
         run: git fetch upstream 
 
