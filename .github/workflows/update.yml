@@ -3,7 +3,7 @@ name: Update & Build
 on:
   workflow_dispatch:
     inputs:
-      build-paperclip:
+      paperclip:
         description: 'Build a paperclip jar?'
         required: false
         type: boolean
@@ -38,14 +38,36 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Setup remotes
+        continue-on-error: true
         run: git remote add upstream https://github.com/PaperMC/Paper.git && git remote set-url --push upstream DISABLE
         
       - name: Fetch upstream repo
-        run: git fetch upstream 
+        run: git fetch upstream master
 
       - name: Pull upstream master branch
         run: git pull upstream master
 
       - name: Push to GitHub
         run: git push
+
+      - name: Apply Patches
+        if: ${{ github.event.inputs.paperclip == true }}
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "GitHub Actions"
+          ./gradlew applyPatches --stacktrace
+
+      - name: Create Paperclip Jar
+        if: ${{ github.event.inputs.paperclip == true }}
+        run: ./gradlew createMojmapPaperclipJar --stacktrace
+
+      - name: Upload Paperclip Jar
+        if: ${{ github.event.inputs.paperclip == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: paperclip-turniptales
+          path: build/libs/paper-paperclip-*-mojmap.jar
