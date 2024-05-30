@@ -70,7 +70,7 @@ jobs:
         id: check_new_release
 
       - name: Update cache with the latest release info
-        if: steps.check_new_release.outputs.new_release == 'true'
+        if: $new_release == true
         uses: actions/cache@v3
         with:
           path: previous_build.txt
