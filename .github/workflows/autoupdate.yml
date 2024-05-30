@@ -1,0 +1,81 @@
+name: Check PaperMC Latest Stable Release
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Runs every Monday at 00:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-latest-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Restore previous release from cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: previous_release.txt
+          key: paper-release
+
+      - name: Get latest stable release
+        id: get_latest_release
+        run: |
+          import requests
+          response = requests.get("https://api.papermc.io/v2/projects/paper")
+          data = response.json()
+          versions = data['versions']
+          
+          # Assuming the latest version is the highest version number
+          latest_version = versions[-1]
+          response = requests.get(f"https://api.papermc.io/v2/projects/paper/versions/{latest_version}/builds")
+          builds_data = response.json()
+          builds = builds_data['builds']
+          
+          latest_build = max(build['build'] for build in builds)
+          print(f"::set-output name=latest_version::{latest_version}")
+          print(f"::set-output name=latest_build::{latest_build}")
+
+      - name: Check for new release
+        id: check_new_release
+        run: |
+          latest_version=${{ steps.get_latest_release.outputs.latest_version }}
+          latest_build=${{ steps.get_latest_release.outputs.latest_build }}
+          
+          echo "Latest version: $latest_version"
+          echo "Latest build: $latest_build"
+          
+          previous_version=""
+          previous_build=""
+          
+          if [[ -f "previous_release.txt" ]]; then
+            previous_version=$(cat previous_release.txt | cut -d',' -f1)
+            previous_build=$(cat previous_release.txt | cut -d',' -f2)
+          fi
+          
+          echo "Previous version: $previous_version"
+          echo "Previous build: $previous_build"
+          
+          new_release="false"
+          if [[ "$latest_version" != "$previous_version" ]] || [[ "$latest_build" -gt "$previous_build" ]]; then
+            echo "New stable release found: version $latest_version build $latest_build"
+            echo "$latest_version,$latest_build" > previous_release.txt
+            new_release="true"
+          else
+            echo "No new stable release."
+          fi
+          echo "new_release=$new_release" >> $GITHUB_ENV
+
+      - name: Update cache with the latest release info
+        if: env.new_release == 'true'
+        uses: actions/cache@v3
+        with:
+          path: previous_release.txt
+          key: paper-release
