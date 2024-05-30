@@ -33,6 +33,7 @@ jobs:
         run: |
           python - <<EOF
           import requests
+          import os
           
           response = requests.get(f"https://api.papermc.io/v2/projects/paper/versions/1.20.6/builds")
           builds_data = response.json()
