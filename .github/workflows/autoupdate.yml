@@ -1,4 +1,4 @@
-name: Check PaperMC Latest Stable Release
+name: TT | Autoupdate
 
 on:
   schedule:
@@ -33,47 +33,52 @@ jobs:
         run: |
           python - <<EOF
           import requests
-
-          # Fetch the latest version information
-          response = requests.get("https://api.papermc.io/v2/projects/paper")
-          data = response.json()
-          versions = data['versions']
-
-          # Assuming the latest version is the highest version number
-          latest_version = versions[-1]
-          response = requests.get(f"https://api.papermc.io/v2/projects/paper/versions/{latest_version}/builds")
+          
+          response = requests.get(f"https://api.papermc.io/v2/projects/paper/versions/1.20.6/builds")
           builds_data = response.json()
           builds = builds_data['builds']
-
           latest_build = max(build['build'] for build in builds)
 
-          # Output the latest version and build for GitHub Actions
-          print(f"::set-output name=latest_version::{latest_version}")
-          print(f"::set-output name=latest_build::{latest_build}")
+
+           # Output the latest version for GitHub Actions
+          env_file = os.getenv('GITHUB_ENV')
 
           # Read the previous release info from the cache file
           try:
-              with open("previous_release.txt", "r") as f:
-                  previous_version, previous_build = f.read().split(',')
-                  previous_build = int(previous_build)
+              with open("previous_build.txt", "r") as f:
+                  previous_build = f.read().strip()
           except FileNotFoundError:
-              previous_version, previous_build = None, None
+              previous_build = 0
 
           # Determine if there is a new release
-          new_release = (latest_version != previous_version) or (latest_build > previous_build)
+          new_release = (latest_build > previous_build)
           if new_release:
-              print("New stable release found")
-              with open("previous_release.txt", "w") as f:
-                  f.write(f"{latest_version},{latest_build}")
-              print("::set-output name=new_release::true")
+              with open("previous_build.txt", "w") as f:
+                  f.write(latest_build)
+              with open(env_file, "a") as f:
+                  f.write("new_release=true\n")
           else:
-              print("No new stable release")
-              print("::set-output name=new_release::false")
+              with open(env_file, "a") as f:
+                  f.write("new_release=false\n")
           EOF
 
+      - name: Load latest release info
+        run: |
+          source latest_release.env
+          echo "Latest build: $latest_build"
+
+      - name: Check for new release
+        run: |
+          source new_release.env
+          echo "New release: $new_release"
+        id: check_new_release
+
       - name: Update cache with the latest release info
-        if: steps.get_latest_release.outputs.new_release == 'true'
+        if: steps.check_new_release.outputs.new_release == 'true'
         uses: actions/cache@v3
         with:
-          path: previous_release.txt
+          path: previous_build.txt
           key: paper-release
+
+
+ 
