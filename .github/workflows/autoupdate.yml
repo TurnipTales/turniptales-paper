@@ -63,14 +63,9 @@ jobs:
                   f.write("new_release=false\n")
           EOF
 
-      - name: Load latest release info
-        run: |
-          source latest_release.env
-          echo "Latest build: $latest_build"
-
       - name: Check for new release
         run: |
-          source new_release.env
+          source $GITHUB_ENV
           echo "New release: $new_release"
         id: check_new_release
 
