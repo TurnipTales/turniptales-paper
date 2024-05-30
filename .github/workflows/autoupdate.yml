@@ -79,7 +79,7 @@ jobs:
           path: previous_build.txt
           key: paper-build
           
-      - name: Trigger new release workflow
+      - name: Trigger new update & build workflow
         if: env.new_release == 'true'
         run: |
           curl -X POST \
@@ -87,7 +87,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/TurnipTales/turniptales-paper/actions/workflows/update.yml/dispatches \
             -d '{
-                  "ref":"main",
+                  "ref":"master",
                   "inputs": {
                     "paperclip": "true"
                   }
