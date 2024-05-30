@@ -51,8 +51,8 @@ jobs:
       - name: Pull upstream master branch
         run: git pull upstream master
 
-    #  - name: Push to GitHub
-     #   run: git push
+      - name: Push to GitHub
+        run: git push
 
       - name: Apply Patches
         if: ${{ inputs.paperclip == true }}
