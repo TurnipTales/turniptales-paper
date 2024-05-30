@@ -51,8 +51,11 @@ jobs:
           except FileNotFoundError:
               previous_build = 0
 
+
           # Determine if there is a new release
           new_release = (latest_build > previous_build)
+
+          print(latest_build, previous_build, new_release)
           if new_release:
               with open("previous_build.txt", "w") as f:
                   f.write(str(latest_build))
