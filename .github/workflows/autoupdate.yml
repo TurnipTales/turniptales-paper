@@ -38,7 +38,7 @@ jobs:
           response = requests.get(f"https://api.papermc.io/v2/projects/paper/versions/1.20.6/builds")
           builds_data = response.json()
           builds = builds_data['builds']
-          latest_build = max(build['build'] for build in builds)
+          latest_build = int(max(build['build'] for build in builds))
 
 
            # Output the latest version for GitHub Actions
