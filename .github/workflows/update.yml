@@ -44,11 +44,14 @@ jobs:
       - name: Setup remotes
         continue-on-error: true
         run: git remote add upstream https://github.com/PaperMC/Paper.git && git remote set-url --push upstream DISABLE
+
+      - name: Setup git
+        run: git config --global user.email "no-reply@github.com" && git config --global user.name "GitHub Actions"
         
       - name: Fetch upstream repo
         run: git fetch upstream master
 
-      - name: Pull upstream master branch
+      - name: Merge upstream master branch
         run: git merge upstream/master
 
       - name: Push to GitHub
@@ -56,10 +59,7 @@ jobs:
 
       - name: Apply Patches
         if: ${{ inputs.paperclip == true }}
-        run: |
-          git config --global user.email "no-reply@github.com"
-          git config --global user.name "GitHub Actions"
-          ./gradlew applyPatches --stacktrace
+        run: ./gradlew applyPatches --stacktrace
 
       - name: Create Paperclip Jar
         if: ${{ inputs.paperclip == true }}
