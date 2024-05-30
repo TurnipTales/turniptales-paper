@@ -49,7 +49,7 @@ jobs:
         run: git fetch upstream master
 
       - name: Pull upstream master branch
-        run: git rebase upstream master
+        run: git merge upstream/master
 
       - name: Push to GitHub
         run: git push
