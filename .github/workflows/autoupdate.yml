@@ -47,7 +47,7 @@ jobs:
           # Read the previous release info from the cache file
           try:
               with open("previous_build.txt", "r") as f:
-                  previous_build = f.read().strip()
+                  previous_build = int(f.read().strip())
           except FileNotFoundError:
               previous_build = 0
 
@@ -55,7 +55,7 @@ jobs:
           new_release = (latest_build > previous_build)
           if new_release:
               with open("previous_build.txt", "w") as f:
-                  f.write(latest_build)
+                  f.write(str(latest_build))
               with open(env_file, "a") as f:
                   f.write("new_release=true\n")
           else:
