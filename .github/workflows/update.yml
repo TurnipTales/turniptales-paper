@@ -46,7 +46,7 @@ jobs:
         run: git remote add upstream https://github.com/PaperMC/Paper.git && git remote set-url --push upstream DISABLE
 
       - name: Setup git
-        run: git config --global user.email "no-reply@github.com" && git config --global user.name "GitHub Actions"
+        run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com" && git config --global user.name "GitHub Actions"
         
       - name: Fetch upstream repo
         run: git fetch upstream master
