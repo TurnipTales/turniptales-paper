@@ -605,10 +605,10 @@ index 0000000000000000000000000000000000000000..ae60bd96b5284d54676d8e7e4dd5d170
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 21b8f1913ff54d2b1553826269355da8bdb7f702..b9c22f725f5aeaee469fe5b7d8c3a57ddb1d5bdd 100644
+index bb59986c211f7d6ea50b1ad4bd5565227bec8a6c..9c950fc1de15b5039e34a9fdf893e97a8cc13237 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -211,6 +211,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -215,6 +215,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
          // Paper end - initialize global and world-defaults configuration
@@ -617,10 +617,10 @@ index 21b8f1913ff54d2b1553826269355da8bdb7f702..b9c22f725f5aeaee469fe5b7d8c3a57d
          this.setPvpAllowed(dedicatedserverproperties.pvp);
          this.setFlightAllowed(dedicatedserverproperties.allowFlight);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 749a4f1e8e46e0b072832056186d709a93df4b58..af1bca27eb2445218f7daeab3912e561085c9c00 100644
+index 7eb94216cc556ad4c6c76ffab0ca81861d2c1883..e7301f38be4fae26404fd8dd33798ef0764565ac 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -975,6 +975,7 @@ public final class CraftServer implements Server {
+@@ -978,6 +978,7 @@ public final class CraftServer implements Server {
          this.commandMap.clearCommands();
          this.reloadData();
          org.spigotmc.SpigotConfig.registerCommands(); // Spigot
@@ -628,7 +628,7 @@ index 749a4f1e8e46e0b072832056186d709a93df4b58..af1bca27eb2445218f7daeab3912e561
          this.overrideAllCommandBlockCommands = this.commandsConfiguration.getStringList("command-block-overrides").contains("*");
          this.ignoreVanillaPermissions = this.commandsConfiguration.getBoolean("ignore-vanilla-permissions");
  
-@@ -2695,6 +2696,34 @@ public final class CraftServer implements Server {
+@@ -2703,6 +2704,34 @@ public final class CraftServer implements Server {
      // Paper end
  
      // Paper start
