@@ -14,7 +14,7 @@ extensions.configure(PaperweightSourceGeneratorExt::class) {
 dependencies {
     implementation("com.squareup:javapoet:1.13.0")
     implementation(project(":paper-api"))
-    implementation("io.github.classgraph:classgraph:4.8.47")
+    implementation("io.github.classgraph:classgraph:4.8.174")
     implementation("org.jetbrains:annotations:24.0.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
